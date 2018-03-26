@@ -45,8 +45,13 @@ TRAIN:
   BATCH_SIZE_PER_IM: 256
   RPN_PRE_NMS_TOP_N: 2000  # Per FPN level
 TEST:
+<<<<<<< HEAD
   DATASETS: ('voc_2007_test',)
   SCALES: (500,)
+=======
+  DATASETS: ('coco_2014_minival',)
+  SCALE: 500
+>>>>>>> 84d541ecc65b1f6fda795b35e3deacfeed98c02f
   MAX_SIZE: 833
   NMS: 0.5
   RPN_PRE_NMS_TOP_N: 1000  # Per FPN level
