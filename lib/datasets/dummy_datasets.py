@@ -28,6 +28,7 @@ from utils.collections import AttrDict
 def get_coco_dataset():
     """A dummy COCO dataset that includes only the 'classes' field."""
     ds = AttrDict()
+    '''
     classes = [
         '__background__', 'person', 'bicycle', 'car', 'motorcycle', 'airplane',
         'bus', 'train', 'truck', 'boat', 'traffic light', 'fire hydrant',
@@ -43,5 +44,7 @@ def get_coco_dataset():
         'oven', 'toaster', 'sink', 'refrigerator', 'book', 'clock', 'vase',
         'scissors', 'teddy bear', 'hair drier', 'toothbrush'
     ]
+    '''
+    classes = ['__background__', 'tuhen', 'qianao', 'zhezhou', 'tudian', 'qipao', 'bianyuan', 'huahen', 'guahen', 'shenao', 'qingweiao']
     ds.classes = {i: name for i, name in enumerate(classes)}
     return ds

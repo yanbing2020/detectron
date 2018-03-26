@@ -218,7 +218,7 @@ def vis_one_image_opencv(
     # Display in largest to smallest order to reduce occlusion
     areas = (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1])
     sorted_inds = np.argsort(-areas)
-
+    
     for i in sorted_inds:
         bbox = boxes[i, :4]
         score = boxes[i, -1]
@@ -285,6 +285,8 @@ def vis_one_image(
     areas = (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1])
     sorted_inds = np.argsort(-areas)
 
+    r = {}
+    class_text = []
     mask_color_id = 0
     for i in sorted_inds:
         bbox = boxes[i, :4]
@@ -300,6 +302,10 @@ def vis_one_image(
                           fill=False, edgecolor='g',
                           linewidth=0.5, alpha=box_alpha))
 
+        #class_text[i] = dataset.classes[classes[i]] if dataset is not None else \
+        #'id{:d}'.format(classes[i])
+        #r.setdefault(im_name[5:-4],[]).append({"bbox" : boxes[i], "class" : class_text[i]})
+
         if show_class:
             ax.text(
                 bbox[0], bbox[1] - 2,
@@ -309,7 +315,8 @@ def vis_one_image(
                 bbox=dict(
                     facecolor='g', alpha=0.4, pad=0, edgecolor='none'),
                 color='white')
-
+        
+        r.setdefault(im_name[5:-4],[]).append({"bbox" : boxes[i], "class" : get_class_string(classes[i], score, dataset)[:get_class_string(classes[i], score, dataset).index(' ')]})
         # show mask
         if segms is not None and len(segms) > i:
             img = np.ones(im.shape)
@@ -383,7 +390,8 @@ def vis_one_image(
                 plt.setp(
                     line, color=colors[len(kp_lines) + 1], linewidth=1.0,
                     alpha=0.7)
-
+	    
     output_name = os.path.basename(im_name) + '.' + ext
     fig.savefig(os.path.join(output_dir, '{}'.format(output_name)), dpi=dpi)
     plt.close('all')
+    return r

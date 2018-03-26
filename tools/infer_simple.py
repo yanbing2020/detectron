@@ -32,6 +32,7 @@ import logging
 import os
 import sys
 import time
+import pickle 
 
 from caffe2.python import workspace
 
@@ -98,7 +99,9 @@ def main(args):
     assert_and_infer_cfg()
     model = infer_engine.initialize_model_from_cfg()
     dummy_coco_dataset = dummy_datasets.get_coco_dataset()
-
+    re = {}
+    res = []
+    
     if os.path.isdir(args.im_or_folder):
         im_list = glob.iglob(args.im_or_folder + '/*.' + args.image_ext)
     else:
@@ -138,6 +141,26 @@ def main(args):
             thresh=0.7,
             kp_thresh=2
         )
+        re[i] = vis_utils.vis_one_image(
+           im[:, :, ::-1],  # BGR -> RGB for visualization
+           im_name,
+           args.output_dir,
+           cls_boxes,
+           cls_segms,
+           cls_keyps,
+           dataset=dummy_coco_dataset,
+           box_alpha=0.3,
+           show_class=True,
+           thresh=0.7,
+           kp_thresh=2
+        )
+	    #res.update(re[i])
+	res.append(re[i])
+    save_pickle(res, '/tmp/results/result.pkl')
+
+def save_pickle(Object, filename):
+    with open(filename, 'wb') as outfile:
+        pickle.dump(Object, outfile, pickle.HIGHEST_PROTOCOL)
 
 
 if __name__ == '__main__':
